@@ -2,10 +2,10 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Ghép Ảnh Khung</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap');
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -16,69 +16,62 @@
     --text-primary: #1a1917;
     --text-secondary: #7a7870;
     --accent: #2a2825;
-    --accent-hover: #454340;
-    --btn-download: #1a1917;
+    --accent-hover: #3d3b38;
     --radius: 16px;
     --shadow: 0 2px 24px rgba(0,0,0,0.07);
-    --shadow-lg: 0 8px 48px rgba(0,0,0,0.12);
+    --shadow-lg: 0 8px 48px rgba(0,0,0,0.13);
   }
 
   html, body {
-    height: 100%;
+    min-height: 100%;
     background: var(--bg);
     font-family: 'DM Sans', sans-serif;
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
   }
 
-  /* ─── LANDING ─── */
+  /* ══════════════════════════════════════
+     LANDING
+  ══════════════════════════════════════ */
   #landing {
-    min-height: 100vh;
+    min-height: 100svh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 32px 16px 48px;
-    gap: 0;
-    transition: opacity .4s ease;
   }
 
   .landing-logo {
     font-family: 'DM Serif Display', serif;
-    font-size: clamp(24px, 5vw, 36px);
+    font-size: clamp(22px, 5vw, 34px);
     letter-spacing: -0.5px;
-    color: var(--text-primary);
-    margin-bottom: 6px;
+    margin-bottom: 5px;
   }
-
   .landing-sub {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 300;
     color: var(--text-secondary);
-    letter-spacing: 0.6px;
-    margin-bottom: 28px;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
+    margin-bottom: 24px;
   }
 
   /* Landing frame preview */
   .landing-frame-wrap {
     position: relative;
     width: 100%;
-    max-width: 480px;
+    max-width: 440px;
     aspect-ratio: 1/1;
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: var(--shadow-lg);
-    background: #e8e5e0;
+    background: #dedad5;
   }
+  #landingCanvas { display: block; width: 100%; height: 100%; }
 
-  #landingCanvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  /* Upload overlay button centered inside frame */
+  /* Upload overlay */
   .upload-overlay {
     position: absolute;
     inset: 0;
@@ -87,108 +80,88 @@
     justify-content: center;
     pointer-events: none;
   }
-
   .upload-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    background: rgba(255,255,255,0.90);
-    border: 2px dashed rgba(42,40,37,0.22);
+    background: rgba(255,255,255,0.88);
+    border: 2px dashed rgba(42,40,37,0.20);
     border-radius: 20px;
-    padding: 28px 36px;
+    padding: 26px 34px;
     cursor: pointer;
     pointer-events: all;
     transition: background .2s, border-color .2s, transform .15s;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
-  .upload-btn:hover {
-    background: rgba(255,255,255,0.98);
-    border-color: rgba(42,40,37,0.45);
-    transform: scale(1.03);
-  }
+  .upload-btn:hover  { background: rgba(255,255,255,0.97); border-color: rgba(42,40,37,0.40); transform: scale(1.03); }
   .upload-btn:active { transform: scale(0.98); }
-
   .upload-icon {
     width: 48px; height: 48px;
     background: var(--accent);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(42,40,37,0.3);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(42,40,37,0.28);
   }
-
-  .upload-btn-label {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--text-primary);
-    white-space: nowrap;
-  }
-
-  .upload-btn-hint {
-    font-size: 12px;
-    color: var(--text-secondary);
-    white-space: nowrap;
-  }
+  .upload-btn-label { font-size: 15px; font-weight: 500; white-space: nowrap; }
+  .upload-btn-hint  { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
 
   .landing-hint {
-    margin-top: 20px;
+    margin-top: 18px;
     font-size: 12px;
     color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: flex; align-items: center; gap: 6px;
+    flex-wrap: wrap; justify-content: center;
   }
-
   .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
 
-  /* ─── EDITOR ─── */
+  /* ══════════════════════════════════════
+     EDITOR
+  ══════════════════════════════════════ */
   #editor {
     display: none;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
-    padding: 28px 16px 48px;
-    gap: 0;
+    min-height: 100svh;
+    padding: 24px 16px 48px;
   }
 
+  /* Header row */
   .editor-header {
     width: 100%;
     max-width: 520px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+    gap: 8px;
   }
-
   .editor-title {
     font-family: 'DM Serif Display', serif;
     font-size: 20px;
     letter-spacing: -0.3px;
+    flex-shrink: 0;
   }
-
-  .btn-reset {
+  .header-btns { display: flex; gap: 8px; }
+  .btn-sm {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     background: none;
     border: 1.5px solid var(--border);
     border-radius: 24px;
-    padding: 8px 16px;
+    padding: 7px 14px;
     font-family: 'DM Sans', sans-serif;
     font-size: 13px;
     color: var(--text-secondary);
     cursor: pointer;
-    transition: border-color .2s, color .2s;
+    white-space: nowrap;
+    transition: border-color .2s, color .2s, background .2s;
   }
-  .btn-reset:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* Editor canvas wrapper */
+  /* Editor canvas */
   .canvas-wrapper {
     position: relative;
     width: 100%;
@@ -197,50 +170,42 @@
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: var(--shadow-lg);
-    background: #e8e5e0;
+    background: #dedad5;
     cursor: grab;
   }
   .canvas-wrapper:active { cursor: grabbing; }
-
   #canvas {
     display: block;
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
   }
 
-  /* ─── CONTROLS ─── */
+  /* ── Controls card ── */
   .controls {
     width: 100%;
     max-width: 520px;
-    margin-top: 20px;
+    margin-top: 18px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 18px 22px 20px;
     box-shadow: var(--shadow);
   }
-
-  .control-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
+  .control-row { display: flex; align-items: center; gap: 14px; }
   .control-label {
     font-size: 13px;
     color: var(--text-secondary);
-    font-weight: 400;
     white-space: nowrap;
     min-width: 60px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
-
   .slider {
     flex: 1;
-    -webkit-appearance: none;
-    appearance: none;
+    -webkit-appearance: none; appearance: none;
     height: 4px;
     background: var(--border);
     border-radius: 4px;
@@ -265,28 +230,35 @@
     box-shadow: 0 1px 6px rgba(0,0,0,0.2);
     cursor: pointer;
   }
-
   .zoom-value {
     font-size: 13px;
     font-weight: 500;
-    color: var(--text-primary);
     min-width: 38px;
     text-align: right;
   }
-
   .divider { height: 1px; background: var(--border); margin: 14px 0; }
 
-  .control-hint {
-    font-size: 12px;
-    color: var(--text-secondary);
-    display: flex;
+  /* ── Control action buttons row ── */
+  .control-actions { display: flex; gap: 8px; }
+  .btn-action {
+    flex: 1;
+    display: inline-flex;
     align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: border-color .2s, color .2s, background .2s;
   }
-  .hint-item { display: flex; align-items: center; gap: 5px; }
+  .btn-action:hover { border-color: var(--accent); color: var(--accent); background: #fff; }
 
-  /* ─── DOWNLOAD BTN ─── */
+  /* ── Download button ── */
   .btn-download {
     width: 100%;
     max-width: 520px;
@@ -295,38 +267,34 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    background: var(--btn-download);
+    background: var(--accent);
     color: #fff;
     border: none;
     border-radius: 56px;
-    padding: 18px 32px;
+    padding: 17px 32px;
     font-family: 'DM Sans', sans-serif;
     font-size: 15px;
     font-weight: 500;
     letter-spacing: 0.3px;
     cursor: pointer;
     transition: background .2s, transform .15s, box-shadow .2s;
-    box-shadow: 0 4px 20px rgba(26,25,23,0.2);
+    box-shadow: 0 4px 20px rgba(42,40,37,0.22);
   }
-  .btn-download:hover { background: #333; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,25,23,0.28); }
+  .btn-download:hover  { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(42,40,37,0.28); }
   .btn-download:active { transform: translateY(0); }
 
-  /* ─── LOADING OVERLAY ─── */
+  /* ══════════════════════════════════════
+     LOADING OVERLAY
+  ══════════════════════════════════════ */
   .loading-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(245,244,242,0.85);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius);
+    position: absolute; inset: 0;
+    background: rgba(245,244,242,0.82);
+    display: flex; align-items: center; justify-content: center;
     z-index: 10;
-    opacity: 0;
-    pointer-events: none;
+    opacity: 0; pointer-events: none;
     transition: opacity .3s;
   }
   .loading-overlay.visible { opacity: 1; pointer-events: all; }
-
   .spinner {
     width: 32px; height: 32px;
     border: 3px solid var(--border);
@@ -336,44 +304,152 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ─── TOAST ─── */
-  .toast {
-    position: fixed;
-    bottom: 32px;
-    left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: #1a1917;
-    color: #fff;
-    font-size: 14px;
-    padding: 12px 24px;
-    border-radius: 32px;
+  /* ══════════════════════════════════════
+     SAVE MODAL
+  ══════════════════════════════════════ */
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(15,14,13,0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
     opacity: 0;
     pointer-events: none;
+    transition: opacity .3s;
+  }
+  .modal-backdrop.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--surface);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 420px;
+    max-height: 90svh;
+    overflow-y: auto;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    transform: translateY(24px) scale(0.97);
+    transition: transform .3s ease;
+  }
+  .modal-backdrop.open .modal { transform: translateY(0) scale(1); }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px 0;
+  }
+  .modal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    letter-spacing: -0.3px;
+  }
+  .modal-close {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: background .2s, color .2s;
+    flex-shrink: 0;
+  }
+  .modal-close:hover { background: var(--border); color: var(--text-primary); }
+
+  .modal-img-wrap {
+    margin: 16px 20px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #dedad5;
+    position: relative;
+  }
+  .modal-img-wrap img {
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    -webkit-touch-callout: default; /* allow long-press save on iOS */
+  }
+
+  .modal-instruction {
+    margin: 14px 20px 0;
+    background: #fef9ec;
+    border: 1px solid #f5e8b0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #7a6a20;
+  }
+  .modal-instruction strong { font-weight: 600; color: #5a4d10; }
+
+  .modal-footer {
+    padding: 14px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .btn-direct-dl {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+    text-decoration: none;
+  }
+  .btn-direct-dl:hover { background: #fff; border-color: var(--accent); }
+
+  /* ══════════════════════════════════════
+     TOAST
+  ══════════════════════════════════════ */
+  .toast {
+    position: fixed; bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(16px);
+    background: #1a1917; color: #fff;
+    font-size: 14px;
+    padding: 11px 22px;
+    border-radius: 32px;
+    opacity: 0; pointer-events: none;
     transition: opacity .3s, transform .3s;
     white-space: nowrap;
-    z-index: 100;
+    z-index: 300;
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   #fileInput { display: none; }
 
-  @media (max-width: 400px) {
-    .editor-header { margin-bottom: 14px; }
-    .controls { padding: 14px 16px 16px; }
-    .upload-btn { padding: 22px 26px; }
+  @media (max-width: 380px) {
+    .header-btns .btn-sm span { display: none; }
+    .upload-btn { padding: 20px 24px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ─── LANDING ─── -->
+<!-- ══════════════════════════════════════
+     LANDING
+══════════════════════════════════════ -->
 <div id="landing">
   <p class="landing-logo">Frame Studio</p>
   <p class="landing-sub">Ghép ảnh khung chuyên nghiệp</p>
 
   <div class="landing-frame-wrap">
     <canvas id="landingCanvas"></canvas>
-    <!-- Upload button centered inside the frame preview -->
     <div class="upload-overlay" id="uploadOverlay">
       <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
         <div class="upload-icon">
@@ -387,11 +463,11 @@
         <span class="upload-btn-hint">PNG · JPG · WEBP</span>
       </button>
     </div>
-    <div class="loading-overlay" id="landingLoadingOverlay"><div class="spinner"></div></div>
+    <div class="loading-overlay" id="landingLoading"><div class="spinner"></div></div>
   </div>
 
   <p class="landing-hint">
-    <span>Xử lý ngay trên trình duyệt</span>
+    <span>Xử lý trên trình duyệt</span>
     <span class="dot"></span>
     <span>Không lưu dữ liệu</span>
     <span class="dot"></span>
@@ -399,49 +475,67 @@
   </p>
 </div>
 
-<!-- ─── EDITOR ─── -->
+<!-- ══════════════════════════════════════
+     EDITOR
+══════════════════════════════════════ -->
 <div id="editor">
   <div class="editor-header">
     <span class="editor-title">Chỉnh ảnh</span>
-    <button class="btn-reset" onclick="resetApp()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/>
-      </svg>
-      Chọn ảnh khác
-    </button>
+    <div class="header-btns">
+      <!-- Change photo: opens file picker without going back to landing -->
+      <button class="btn-sm" onclick="document.getElementById('fileInput').click()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="3"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+        <span>Chọn ảnh khác</span>
+      </button>
+    </div>
   </div>
 
-  <div class="canvas-wrapper" id="canvasWrapper">
+  <div class="canvas-wrapper">
     <canvas id="canvas"></canvas>
-    <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+    <div class="loading-overlay" id="editorLoading"><div class="spinner"></div></div>
   </div>
 
+  <!-- Controls -->
   <div class="controls">
+    <!-- Zoom slider -->
     <div class="control-row">
       <span class="control-label">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
           <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
         </svg>
-        Thu phóng
+        Phóng to
       </span>
-      <input type="range" id="zoomSlider" class="slider" min="80" max="120" value="100" oninput="onZoomSlider(this.value)">
+      <input type="range" id="zoomSlider" class="slider" min="100" max="150" value="100" oninput="onZoomSlider(this.value)">
       <span class="zoom-value" id="zoomValue">100%</span>
     </div>
+
     <div class="divider"></div>
-    <div class="control-hint">
-      <span class="hint-item">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg>
-        Kéo thả để di chuyển ảnh
-      </span>
-      <span class="hint-item">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Frame luôn ở lớp trên cùng
-      </span>
+
+    <!-- Action buttons -->
+    <div class="control-actions">
+      <button class="btn-action" onclick="resetPosition()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/>
+        </svg>
+        Đặt lại vị trí
+      </button>
+      <button class="btn-action" onclick="document.getElementById('fileInput').click()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 16 12 12 8 16"/>
+          <line x1="12" y1="12" x2="12" y2="21"/>
+          <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+        </svg>
+        Chọn ảnh khác
+      </button>
     </div>
   </div>
 
-  <button class="btn-download" onclick="downloadImage()">
+  <button class="btn-download" onclick="openSaveModal()">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
       <polyline points="7 10 12 15 17 10"/>
@@ -451,172 +545,273 @@
   </button>
 </div>
 
+<!-- ══════════════════════════════════════
+     SAVE MODAL
+══════════════════════════════════════ -->
+<div class="modal-backdrop" id="saveModal" onclick="onModalBackdropClick(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Lưu ảnh của bạn</span>
+      <button class="modal-close" onclick="closeModal()" aria-label="Đóng">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-img-wrap">
+      <img id="modalResultImg" src="" alt="Kết quả ghép ảnh">
+    </div>
+
+    <div class="modal-instruction">
+      <strong>📱 Trên điện thoại:</strong> Nhấn giữ vào ảnh khoảng 2 giây để hiện menu lưu.<br>
+      Chọn <strong>"Lưu vào ảnh"</strong> (iOS) hoặc <strong>"Tải hình ảnh xuống"</strong> (Android).
+    </div>
+
+    <div class="modal-footer">
+      <a id="directDownloadLink" class="btn-direct-dl" download="anh-ghep-khung.png">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Tải file trực tiếp (Android / PC)
+      </a>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(this)">
 
 <script>
-// ─── CONSTANTS ───
-const C           = 520;    // editor canvas size in px
-const EXPORT_SIZE = 1080;
-const FRAME_SRC   = 'frame.png';
-const ZOOM_MIN    = 0.80;   // 80%  relative to cover-fit baseScale
-const ZOOM_MAX    = 1.20;   // 120% relative to cover-fit baseScale
+// ══════════════════════════════════════
+//  CONSTANTS
+// ══════════════════════════════════════
+// Frame source dimensions
+const FRAME_PX   = 1080;   // frame.png native size
+const ZONE_PX    = 920;    // visible photo area inside frame
+const OFFSET_PX  = (FRAME_PX - ZONE_PX) / 2;  // = 80px margin on each side
 
-// ─── EDITOR CANVAS ───
+// Display canvas (logical coordinates)
+const C = 520;             // canvas CSS/logical size
+const DISPLAY_ZONE   = C * (ZONE_PX  / FRAME_PX);   // ≈ 442.96 px on display canvas
+const DISPLAY_OFFSET = C * (OFFSET_PX / FRAME_PX);   // ≈  38.52 px
+
+const EXPORT_SIZE = FRAME_PX;   // 1080×1080 export
+const FRAME_SRC   = 'frame.png';
+
+// Zoom: 100% = fits zone exactly, max 150%
+const ZOOM_MIN = 1.00;
+const ZOOM_MAX = 1.50;
+
+// ══════════════════════════════════════
+//  CANVAS SETUP
+// ══════════════════════════════════════
 const canvas = document.getElementById('canvas');
 const ctx    = canvas.getContext('2d');
 canvas.width  = C;
 canvas.height = C;
 
-// ─── LANDING CANVAS ───
 const lCanvas = document.getElementById('landingCanvas');
 const lCtx    = lCanvas.getContext('2d');
 
-function sizeLandingCanvas() {
-  const rect = lCanvas.parentElement.getBoundingClientRect();
-  const px   = Math.round(rect.width) || 480;
-  if (lCanvas.width !== px) {
-    lCanvas.width  = px;
-    lCanvas.height = px;
-  }
-}
-
-// ─── STATE ───
+// ══════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════
 let userImg  = null;
 let frameImg = null;
-// baseScale: cover-fit ratio so image fills canvas without gaps
-// zoom: user multiplier in [ZOOM_MIN, ZOOM_MAX]
+// baseScale: scale so image covers DISPLAY_ZONE (not the full C)
+// zoom:      multiplier [1.00 – 1.50]
 let imgState = { x: 0, y: 0, baseScale: 1, zoom: 1 };
-let drag     = { active: false, startX: 0, startY: 0, imgX: 0, imgY: 0 };
+let drag = { active: false, startX: 0, startY: 0, imgX: 0, imgY: 0 };
+let isInEditor = false;   // track whether user is in editor (for fileInput routing)
 
-// ─── PRELOAD FRAME ───
+// ══════════════════════════════════════
+//  FRAME PRELOAD
+// ══════════════════════════════════════
 (function preloadFrame() {
   const img       = new Image();
   img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    frameImg = img;
-    drawLanding();   // render frame on landing canvas right away
-  };
+  img.onload = () => { frameImg = img; drawLanding(); };
   img.onerror = () => { frameImg = null; };
   img.src = FRAME_SRC;
 })();
 
-// Draw frame preview on the landing page (no user image)
+function sizeLandingCanvas() {
+  const rect = lCanvas.parentElement.getBoundingClientRect();
+  const px   = Math.round(rect.width) || 440;
+  if (lCanvas.width !== px) { lCanvas.width = px; lCanvas.height = px; }
+}
+
 function drawLanding() {
   sizeLandingCanvas();
   lCtx.clearRect(0, 0, lCanvas.width, lCanvas.height);
-  if (frameImg) {
-    lCtx.drawImage(frameImg, 0, 0, lCanvas.width, lCanvas.height);
-  }
+  if (frameImg) lCtx.drawImage(frameImg, 0, 0, lCanvas.width, lCanvas.height);
 }
 
-// ─── FILE SELECT ───
+// ══════════════════════════════════════
+//  FILE SELECT
+// ══════════════════════════════════════
 function handleFileSelect(input) {
   if (!input.files || !input.files[0]) return;
   const file = input.files[0];
   if (!file.type.startsWith('image/')) { showToast('Vui lòng chọn file ảnh hợp lệ.'); return; }
 
-  showLandingLoading(true);
+  // Show appropriate loading spinner
+  if (isInEditor) {
+    document.getElementById('editorLoading').classList.add('visible');
+  } else {
+    document.getElementById('landingLoading').classList.add('visible');
+    document.getElementById('uploadOverlay').style.display = 'none';
+  }
+
   const reader = new FileReader();
   reader.onload = e => {
     const img  = new Image();
     img.onload = () => {
       userImg = img;
       initImageState();
-      showEditor();
-      showLandingLoading(false);
+      if (!isInEditor) showEditor();
+      document.getElementById('editorLoading').classList.remove('visible');
+      document.getElementById('landingLoading').classList.remove('visible');
     };
-    img.onerror = () => { showToast('Không thể đọc ảnh. Hãy thử lại.'); showLandingLoading(false); };
+    img.onerror = () => {
+      showToast('Không thể đọc ảnh. Hãy thử lại.');
+      document.getElementById('editorLoading').classList.remove('visible');
+      document.getElementById('landingLoading').classList.remove('visible');
+      document.getElementById('uploadOverlay').style.display = 'flex';
+    };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
-  input.value = '';   // allow re-selecting the same file
+  input.value = '';
 }
 
-// ─── INIT IMAGE STATE ───
-// Cover-fit: scale = max(C/w, C/h) ensures every pixel of the canvas is covered.
-// Portrait  → width fits exactly, height overflows → no horizontal gap
-// Landscape → height fits exactly, width overflows  → no vertical gap
-// Square    → both fit exactly
+// ══════════════════════════════════════
+//  INIT IMAGE STATE  (Smart Fit to 920px zone)
+// ══════════════════════════════════════
+// Goal: image covers the DISPLAY_ZONE area completely at zoom=1.
+// baseScale = max(DISPLAY_ZONE / imgW, DISPLAY_ZONE / imgH)
+//   → shorter side fills the zone exactly; longer side overflows safely.
+// Position: image centered on zone center = (DISPLAY_OFFSET + DISPLAY_ZONE/2).
 function initImageState() {
-  const baseScale    = Math.max(C / userImg.width, C / userImg.height);
+  const baseScale    = Math.max(DISPLAY_ZONE / userImg.width, DISPLAY_ZONE / userImg.height);
   imgState.baseScale = baseScale;
-  imgState.zoom      = 1;   // 100% = cover-fit
+  imgState.zoom      = 1;
 
-  // Center image on canvas
+  // Zone center on the display canvas
+  const zoneCX = DISPLAY_OFFSET + DISPLAY_ZONE / 2;
+  const zoneCY = DISPLAY_OFFSET + DISPLAY_ZONE / 2;
+
   const w = userImg.width  * baseScale;
   const h = userImg.height * baseScale;
-  imgState.x = (C - w) / 2;
-  imgState.y = (C - h) / 2;
+  imgState.x = zoneCX - w / 2;
+  imgState.y = zoneCY - h / 2;
 
-  // Reset slider to midpoint (100 → zoom=1.00)
   document.getElementById('zoomSlider').value = 100;
   document.getElementById('zoomValue').textContent = '100%';
-
   draw();
 }
 
-// ─── DRAW (editor) ───
+// ══════════════════════════════════════
+//  DRAW
+// ══════════════════════════════════════
 function draw() {
   ctx.clearRect(0, 0, C, C);
-
   if (userImg) {
     const sc = imgState.baseScale * imgState.zoom;
     ctx.drawImage(userImg, imgState.x, imgState.y, userImg.width * sc, userImg.height * sc);
   }
-
-  if (frameImg) {
-    ctx.drawImage(frameImg, 0, 0, C, C);
-  }
+  if (frameImg) ctx.drawImage(frameImg, 0, 0, C, C);
 }
 
-// ─── ZOOM ───
-// Slider: integer 80–120. Maps linearly to zoom 0.80–1.20.
+// ══════════════════════════════════════
+//  ZOOM  (slider 100–150 → zoom 1.00–1.50)
+// ══════════════════════════════════════
 function onZoomSlider(val) {
   const pct     = parseInt(val);
   const newZoom = pct / 100;
-
   document.getElementById('zoomValue').textContent = pct + '%';
 
   const oldSc = imgState.baseScale * imgState.zoom;
   imgState.zoom = newZoom;
   const newSc = imgState.baseScale * imgState.zoom;
 
-  // Zoom anchored to canvas center so the view doesn't jump
-  const cx = C / 2, cy = C / 2;
-  imgState.x = cx - (cx - imgState.x) * (newSc / oldSc);
-  imgState.y = cy - (cy - imgState.y) * (newSc / oldSc);
+  // Anchor zoom to zone center
+  const zoneCX = DISPLAY_OFFSET + DISPLAY_ZONE / 2;
+  const zoneCY = DISPLAY_OFFSET + DISPLAY_ZONE / 2;
+  imgState.x = zoneCX - (zoneCX - imgState.x) * (newSc / oldSc);
+  imgState.y = zoneCY - (zoneCY - imgState.y) * (newSc / oldSc);
 
   clampPosition();
   draw();
 }
 
-// ─── CLAMP — image must fully cover the canvas at all times ───
-// Because baseScale is cover-fit and zoom >= ZOOM_MIN (0.80), the scaled image
-// is always >= canvas on its SMALLER axis. On its LARGER axis it always overflows.
-// Constraint: none of the four edges may cross inside the canvas boundary.
-//   x <= 0              left edge at or left of left side
-//   x + imgW >= C       right edge at or right of right side
-//   y <= 0              top edge at or above top
-//   y + imgH >= C       bottom edge at or below bottom
+// ══════════════════════════════════════
+//  CLAMP — image must fully cover the 920px zone
+// ══════════════════════════════════════
+// Zone bounds on display canvas:
+//   left   = DISPLAY_OFFSET
+//   top    = DISPLAY_OFFSET
+//   right  = DISPLAY_OFFSET + DISPLAY_ZONE
+//   bottom = DISPLAY_OFFSET + DISPLAY_ZONE
+//
+// Image edges must stay AT or BEYOND zone edges:
+//   imgState.x            <= DISPLAY_OFFSET            (left edge ≤ zone left)
+//   imgState.x + imgW     >= DISPLAY_OFFSET + DISPLAY_ZONE  (right edge ≥ zone right)
+//   imgState.y            <= DISPLAY_OFFSET            (top edge ≤ zone top)
+//   imgState.y + imgH     >= DISPLAY_OFFSET + DISPLAY_ZONE  (bottom edge ≥ zone bottom)
 function clampPosition() {
   if (!userImg) return;
   const sc = imgState.baseScale * imgState.zoom;
   const w  = userImg.width  * sc;
   const h  = userImg.height * sc;
 
-  imgState.x = Math.min(imgState.x, 0);
-  imgState.x = Math.max(imgState.x, C - w);
-  imgState.y = Math.min(imgState.y, 0);
-  imgState.y = Math.max(imgState.y, C - h);
+  const zoneL = DISPLAY_OFFSET;
+  const zoneT = DISPLAY_OFFSET;
+  const zoneR = DISPLAY_OFFSET + DISPLAY_ZONE;
+  const zoneB = DISPLAY_OFFSET + DISPLAY_ZONE;
+
+  // Left edge must not go past zone left interior
+  imgState.x = Math.min(imgState.x, zoneL);
+  // Right edge must reach at least zone right
+  imgState.x = Math.max(imgState.x, zoneR - w);
+  // Top edge must not go past zone top interior
+  imgState.y = Math.min(imgState.y, zoneT);
+  // Bottom edge must reach at least zone bottom
+  imgState.y = Math.max(imgState.y, zoneB - h);
 }
 
-// ─── DRAG — MOUSE ───
+// ══════════════════════════════════════
+//  RESET POSITION
+// ══════════════════════════════════════
+function resetPosition() {
+  if (!userImg) return;
+  imgState.zoom = 1;
+
+  const zoneCX = DISPLAY_OFFSET + DISPLAY_ZONE / 2;
+  const zoneCY = DISPLAY_OFFSET + DISPLAY_ZONE / 2;
+  const w = userImg.width  * imgState.baseScale;
+  const h = userImg.height * imgState.baseScale;
+  imgState.x = zoneCX - w / 2;
+  imgState.y = zoneCY - h / 2;
+
+  document.getElementById('zoomSlider').value = 100;
+  document.getElementById('zoomValue').textContent = '100%';
+  draw();
+}
+
+// ══════════════════════════════════════
+//  DRAG — MOUSE
+// ══════════════════════════════════════
 canvas.addEventListener('mousedown', e => { e.preventDefault(); startDrag(e.clientX, e.clientY); });
 window.addEventListener('mousemove', e => { if (drag.active) moveDrag(e.clientX, e.clientY); });
 window.addEventListener('mouseup',   () => { drag.active = false; });
 
-// ─── DRAG — TOUCH ───
+// ══════════════════════════════════════
+//  DRAG — TOUCH
+// ══════════════════════════════════════
 canvas.addEventListener('touchstart', e => {
   e.preventDefault();
   if (e.touches.length === 1) startDrag(e.touches[0].clientX, e.touches[0].clientY);
@@ -634,16 +829,12 @@ function clientToCanvas(cx, cy) {
     y: (cy - rect.top)  * (C / rect.height)
   };
 }
-
 function startDrag(cx, cy) {
   const pt    = clientToCanvas(cx, cy);
   drag.active = true;
-  drag.startX = pt.x;
-  drag.startY = pt.y;
-  drag.imgX   = imgState.x;
-  drag.imgY   = imgState.y;
+  drag.startX = pt.x; drag.startY = pt.y;
+  drag.imgX   = imgState.x; drag.imgY = imgState.y;
 }
-
 function moveDrag(cx, cy) {
   const pt   = clientToCanvas(cx, cy);
   imgState.x = drag.imgX + (pt.x - drag.startX);
@@ -652,21 +843,18 @@ function moveDrag(cx, cy) {
   draw();
 }
 
-// ─── DOWNLOAD ───
-function downloadImage() {
-  if (!userImg) { showToast('Chưa có ảnh để xuất.'); return; }
+// ══════════════════════════════════════
+//  RENDER EXPORT CANVAS  (1080×1080)
+// ══════════════════════════════════════
+function renderExport() {
+  const off   = document.createElement('canvas');
+  off.width   = EXPORT_SIZE;
+  off.height  = EXPORT_SIZE;
+  const offCtx = off.getContext('2d');
 
-  showToast('Đang tạo ảnh xuất…');
+  const ratio = EXPORT_SIZE / C;   // 1080 / 520 ≈ 2.077
 
-  const offCanvas  = document.createElement('canvas');
-  offCanvas.width  = EXPORT_SIZE;
-  offCanvas.height = EXPORT_SIZE;
-  const offCtx = offCanvas.getContext('2d');
-
-  // Upscale factor: export / display
-  const ratio = EXPORT_SIZE / C;
-
-  // Reproduce the exact same layout at export resolution
+  // Draw user photo at full export resolution
   const sc = imgState.baseScale * imgState.zoom * ratio;
   offCtx.drawImage(
     userImg,
@@ -676,65 +864,71 @@ function downloadImage() {
     userImg.height * sc
   );
 
-  const drawFrameAndSave = (fImage) => {
-    if (fImage) offCtx.drawImage(fImage, 0, 0, EXPORT_SIZE, EXPORT_SIZE);
+  return off;   // caller will add frame on top
+}
+
+// ══════════════════════════════════════
+//  OPEN SAVE MODAL
+// ══════════════════════════════════════
+function openSaveModal() {
+  if (!userImg) { showToast('Chưa có ảnh để xuất.'); return; }
+
+  showToast('Đang tạo ảnh…');
+
+  const finalize = (fImage) => {
     try {
-      const link    = document.createElement('a');
-      link.download = 'anh-ghep-khung.png';
-      link.href     = offCanvas.toDataURL('image/png');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      showToast('✓ Ảnh đã được tải về!');
+      const off    = renderExport();
+      const offCtx = off.getContext('2d');
+      if (fImage) offCtx.drawImage(fImage, 0, 0, EXPORT_SIZE, EXPORT_SIZE);
+
+      const dataURL = off.toDataURL('image/png');
+
+      // Populate modal
+      document.getElementById('modalResultImg').src   = dataURL;
+      document.getElementById('directDownloadLink').href = dataURL;
+
+      // Open modal
+      document.getElementById('saveModal').classList.add('open');
     } catch (err) {
-      showToast('Lỗi: canvas bị tainted. Hãy dùng local server (Live Server / npx serve).');
-      console.error('Export error:', err);
+      showToast('Lỗi: canvas bị tainted. Hãy dùng local server.');
+      console.error(err);
     }
   };
 
   if (frameImg) {
-    drawFrameAndSave(frameImg);
+    finalize(frameImg);
   } else {
     const fImg       = new Image();
     fImg.crossOrigin = 'anonymous';
-    fImg.onload  = () => drawFrameAndSave(fImg);
-    fImg.onerror = () => { showToast('Không tìm thấy frame.png — xuất ảnh không có khung.'); drawFrameAndSave(null); };
+    fImg.onload  = () => finalize(fImg);
+    fImg.onerror = () => finalize(null);
     fImg.src = FRAME_SRC + '?t=' + Date.now();
   }
 }
 
-// ─── UI HELPERS ───
+function closeModal() {
+  document.getElementById('saveModal').classList.remove('open');
+  // Free memory after transition
+  setTimeout(() => { document.getElementById('modalResultImg').src = ''; }, 400);
+}
+
+function onModalBackdropClick(e) {
+  if (e.target === document.getElementById('saveModal')) closeModal();
+}
+
+// ══════════════════════════════════════
+//  UI HELPERS
+// ══════════════════════════════════════
 function showEditor() {
+  isInEditor = true;
   document.getElementById('landing').style.display = 'none';
   const ed = document.getElementById('editor');
-  ed.style.display  = 'flex';
-  ed.style.opacity  = 0;
+  ed.style.display = 'flex';
+  ed.style.opacity = 0;
   requestAnimationFrame(() => {
     ed.style.transition = 'opacity .4s ease';
     ed.style.opacity    = 1;
   });
-}
-
-function resetApp() {
-  userImg = null;
-  ctx.clearRect(0, 0, C, C);
-  document.getElementById('editor').style.display = 'none';
-
-  const landing = document.getElementById('landing');
-  landing.style.display = 'flex';
-  landing.style.opacity = 1;
-
-  document.getElementById('uploadOverlay').style.display = 'flex';
-  drawLanding();
-}
-
-function showLandingLoading(on) {
-  document.getElementById('landingLoadingOverlay').classList.toggle('visible', on);
-  document.getElementById('uploadOverlay').style.display = on ? 'none' : 'flex';
-}
-
-function showLoading(on) {
-  document.getElementById('loadingOverlay').classList.toggle('visible', on);
 }
 
 let toastTimer;
@@ -746,7 +940,6 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-// Render landing frame once layout is complete
 window.addEventListener('load', drawLanding);
 </script>
 </body>
