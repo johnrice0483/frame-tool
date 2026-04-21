@@ -33,77 +33,119 @@
 
   /* ─── LANDING ─── */
   #landing {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 32px 16px 48px;
     gap: 0;
     transition: opacity .4s ease;
   }
 
   .landing-logo {
     font-family: 'DM Serif Display', serif;
-    font-size: clamp(28px, 5vw, 42px);
+    font-size: clamp(24px, 5vw, 36px);
     letter-spacing: -0.5px;
     color: var(--text-primary);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   .landing-sub {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 300;
     color: var(--text-secondary);
     letter-spacing: 0.6px;
-    margin-bottom: 52px;
+    margin-bottom: 28px;
     text-transform: uppercase;
   }
 
-  .btn-start {
+  /* Landing frame preview */
+  .landing-frame-wrap {
     position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 56px;
-    padding: 18px 40px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    letter-spacing: 0.3px;
-    cursor: pointer;
+    width: 100%;
+    max-width: 480px;
+    aspect-ratio: 1/1;
+    border-radius: var(--radius);
     overflow: hidden;
-    transition: background .2s, transform .15s, box-shadow .2s;
-    box-shadow: 0 4px 20px rgba(42,40,37,0.25);
+    box-shadow: var(--shadow-lg);
+    background: #e8e5e0;
   }
 
-  .btn-start::after {
-    content: '';
+  #landingCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Upload overlay button centered inside frame */
+  .upload-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(255,255,255,0.08);
-    opacity: 0;
-    transition: opacity .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
   }
 
-  .btn-start:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(42,40,37,0.3); }
-  .btn-start:hover::after { opacity: 1; }
-  .btn-start:active { transform: translateY(0); }
+  .upload-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.90);
+    border: 2px dashed rgba(42,40,37,0.22);
+    border-radius: 20px;
+    padding: 28px 36px;
+    cursor: pointer;
+    pointer-events: all;
+    transition: background .2s, border-color .2s, transform .15s;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .upload-btn:hover {
+    background: rgba(255,255,255,0.98);
+    border-color: rgba(42,40,37,0.45);
+    transform: scale(1.03);
+  }
+  .upload-btn:active { transform: scale(0.98); }
 
-  .btn-start svg { flex-shrink: 0; }
+  .upload-icon {
+    width: 48px; height: 48px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(42,40,37,0.3);
+  }
+
+  .upload-btn-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .upload-btn-hint {
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
 
   .landing-hint {
-    margin-top: 28px;
-    font-size: 13px;
+    margin-top: 20px;
+    font-size: 12px;
     color: var(--text-secondary);
     display: flex;
     align-items: center;
     gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
-  .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border); }
+  .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
 
   /* ─── EDITOR ─── */
   #editor {
@@ -111,7 +153,7 @@
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    padding: 32px 16px 48px;
+    padding: 28px 16px 48px;
     gap: 0;
   }
 
@@ -121,7 +163,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 28px;
+    margin-bottom: 20px;
   }
 
   .editor-title {
@@ -146,7 +188,7 @@
   }
   .btn-reset:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* ─── CANVAS WRAPPER ─── */
+  /* Editor canvas wrapper */
   .canvas-wrapper {
     position: relative;
     width: 100%;
@@ -173,11 +215,11 @@
   .controls {
     width: 100%;
     max-width: 520px;
-    margin-top: 24px;
+    margin-top: 20px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 20px 24px 22px;
+    padding: 18px 22px 20px;
     box-shadow: var(--shadow);
   }
 
@@ -204,9 +246,7 @@
     border-radius: 4px;
     outline: none;
     cursor: pointer;
-    position: relative;
   }
-
   .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 20px; height: 20px;
@@ -234,7 +274,7 @@
     text-align: right;
   }
 
-  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+  .divider { height: 1px; background: var(--border); margin: 14px 0; }
 
   .control-hint {
     font-size: 12px;
@@ -242,15 +282,15 @@
     display: flex;
     align-items: center;
     gap: 16px;
+    flex-wrap: wrap;
   }
-
   .hint-item { display: flex; align-items: center; gap: 5px; }
 
   /* ─── DOWNLOAD BTN ─── */
   .btn-download {
     width: 100%;
     max-width: 520px;
-    margin-top: 16px;
+    margin-top: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -270,28 +310,6 @@
   }
   .btn-download:hover { background: #333; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,25,23,0.28); }
   .btn-download:active { transform: translateY(0); }
-
-  /* ─── TOAST ─── */
-  .toast {
-    position: fixed;
-    bottom: 32px;
-    left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: #1a1917;
-    color: #fff;
-    font-size: 14px;
-    padding: 12px 24px;
-    border-radius: 32px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .3s, transform .3s;
-    white-space: nowrap;
-    z-index: 100;
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-  /* ─── HIDDEN INPUT ─── */
-  #fileInput { display: none; }
 
   /* ─── LOADING OVERLAY ─── */
   .loading-overlay {
@@ -318,36 +336,70 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #1a1917;
+    color: #fff;
+    font-size: 14px;
+    padding: 12px 24px;
+    border-radius: 32px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s, transform .3s;
+    white-space: nowrap;
+    z-index: 100;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  #fileInput { display: none; }
+
   @media (max-width: 400px) {
-    .editor-header { margin-bottom: 18px; }
-    .controls { padding: 16px 18px 18px; }
+    .editor-header { margin-bottom: 14px; }
+    .controls { padding: 14px 16px 16px; }
+    .upload-btn { padding: 22px 26px; }
   }
 </style>
 </head>
 <body>
 
-<!-- LANDING -->
+<!-- ─── LANDING ─── -->
 <div id="landing">
   <p class="landing-logo">Frame Studio</p>
   <p class="landing-sub">Ghép ảnh khung chuyên nghiệp</p>
-  <button class="btn-start" onclick="document.getElementById('fileInput').click()">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="3" width="18" height="18" rx="3"/>
-      <circle cx="8.5" cy="8.5" r="1.5"/>
-      <polyline points="21 15 16 10 5 21"/>
-    </svg>
-    BẮT ĐẦU: CHỌN ẢNH TỪ MÁY
-  </button>
+
+  <div class="landing-frame-wrap">
+    <canvas id="landingCanvas"></canvas>
+    <!-- Upload button centered inside the frame preview -->
+    <div class="upload-overlay" id="uploadOverlay">
+      <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 16 12 12 8 16"/>
+            <line x1="12" y1="12" x2="12" y2="21"/>
+            <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+          </svg>
+        </div>
+        <span class="upload-btn-label">Tải ảnh lên</span>
+        <span class="upload-btn-hint">PNG · JPG · WEBP</span>
+      </button>
+    </div>
+    <div class="loading-overlay" id="landingLoadingOverlay"><div class="spinner"></div></div>
+  </div>
+
   <p class="landing-hint">
-    <span>PNG · JPG · WEBP</span>
-    <span class="dot"></span>
     <span>Xử lý ngay trên trình duyệt</span>
     <span class="dot"></span>
     <span>Không lưu dữ liệu</span>
+    <span class="dot"></span>
+    <span>Xuất 1080×1080px</span>
   </p>
 </div>
 
-<!-- EDITOR -->
+<!-- ─── EDITOR ─── -->
 <div id="editor">
   <div class="editor-header">
     <span class="editor-title">Chỉnh ảnh</span>
@@ -373,7 +425,7 @@
         </svg>
         Thu phóng
       </span>
-      <input type="range" id="zoomSlider" class="slider" min="10" max="300" value="100" oninput="onZoomSlider(this.value)">
+      <input type="range" id="zoomSlider" class="slider" min="80" max="120" value="100" oninput="onZoomSlider(this.value)">
       <span class="zoom-value" id="zoomValue">100%</span>
     </div>
     <div class="divider"></div>
@@ -403,29 +455,60 @@
 <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(this)">
 
 <script>
-// ─── STATE ───
-const CANVAS_DISPLAY_SIZE = 520; // px (display, hi-res export = 1080)
+// ─── CONSTANTS ───
+const C           = 520;    // editor canvas size in px
 const EXPORT_SIZE = 1080;
-const FRAME_SRC = 'frame.png';
+const FRAME_SRC   = 'frame.png';
+const ZOOM_MIN    = 0.80;   // 80%  relative to cover-fit baseScale
+const ZOOM_MAX    = 1.20;   // 120% relative to cover-fit baseScale
 
+// ─── EDITOR CANVAS ───
 const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = CANVAS_DISPLAY_SIZE;
-canvas.height = CANVAS_DISPLAY_SIZE;
+const ctx    = canvas.getContext('2d');
+canvas.width  = C;
+canvas.height = C;
 
-let userImg = null;
+// ─── LANDING CANVAS ───
+const lCanvas = document.getElementById('landingCanvas');
+const lCtx    = lCanvas.getContext('2d');
+
+function sizeLandingCanvas() {
+  const rect = lCanvas.parentElement.getBoundingClientRect();
+  const px   = Math.round(rect.width) || 480;
+  if (lCanvas.width !== px) {
+    lCanvas.width  = px;
+    lCanvas.height = px;
+  }
+}
+
+// ─── STATE ───
+let userImg  = null;
 let frameImg = null;
-let imgState = { x: 0, y: 0, scale: 1, baseScale: 1 };
-let drag = { active: false, startX: 0, startY: 0, imgX: 0, imgY: 0 };
+// baseScale: cover-fit ratio so image fills canvas without gaps
+// zoom: user multiplier in [ZOOM_MIN, ZOOM_MAX]
+let imgState = { x: 0, y: 0, baseScale: 1, zoom: 1 };
+let drag     = { active: false, startX: 0, startY: 0, imgX: 0, imgY: 0 };
 
-// ─── INIT ───
+// ─── PRELOAD FRAME ───
 (function preloadFrame() {
-  const img = new Image();
+  const img       = new Image();
   img.crossOrigin = 'anonymous';
-  img.onload = () => { frameImg = img; draw(); };
+  img.onload = () => {
+    frameImg = img;
+    drawLanding();   // render frame on landing canvas right away
+  };
   img.onerror = () => { frameImg = null; };
   img.src = FRAME_SRC;
 })();
+
+// Draw frame preview on the landing page (no user image)
+function drawLanding() {
+  sizeLandingCanvas();
+  lCtx.clearRect(0, 0, lCanvas.width, lCanvas.height);
+  if (frameImg) {
+    lCtx.drawImage(frameImg, 0, 0, lCanvas.width, lCanvas.height);
+  }
+}
 
 // ─── FILE SELECT ───
 function handleFileSelect(input) {
@@ -433,61 +516,74 @@ function handleFileSelect(input) {
   const file = input.files[0];
   if (!file.type.startsWith('image/')) { showToast('Vui lòng chọn file ảnh hợp lệ.'); return; }
 
-  showLoading(true);
+  showLandingLoading(true);
   const reader = new FileReader();
   reader.onload = e => {
-    const img = new Image();
+    const img  = new Image();
     img.onload = () => {
       userImg = img;
       initImageState();
       showEditor();
-      showLoading(false);
+      showLandingLoading(false);
     };
-    img.onerror = () => { showToast('Không thể đọc ảnh. Hãy thử lại.'); showLoading(false); };
+    img.onerror = () => { showToast('Không thể đọc ảnh. Hãy thử lại.'); showLandingLoading(false); };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
-  // reset input so same file can be reselected
-  input.value = '';
+  input.value = '';   // allow re-selecting the same file
 }
 
+// ─── INIT IMAGE STATE ───
+// Cover-fit: scale = max(C/w, C/h) ensures every pixel of the canvas is covered.
+// Portrait  → width fits exactly, height overflows → no horizontal gap
+// Landscape → height fits exactly, width overflows  → no vertical gap
+// Square    → both fit exactly
 function initImageState() {
-  // Fit image to fill canvas (cover)
-  const ratio = Math.max(CANVAS_DISPLAY_SIZE / userImg.width, CANVAS_DISPLAY_SIZE / userImg.height);
-  imgState.baseScale = ratio;
-  imgState.scale = 1; // zoom multiplier (1 = fit-cover)
-  imgState.x = (CANVAS_DISPLAY_SIZE - userImg.width * ratio) / 2;
-  imgState.y = (CANVAS_DISPLAY_SIZE - userImg.height * ratio) / 2;
+  const baseScale    = Math.max(C / userImg.width, C / userImg.height);
+  imgState.baseScale = baseScale;
+  imgState.zoom      = 1;   // 100% = cover-fit
+
+  // Center image on canvas
+  const w = userImg.width  * baseScale;
+  const h = userImg.height * baseScale;
+  imgState.x = (C - w) / 2;
+  imgState.y = (C - h) / 2;
+
+  // Reset slider to midpoint (100 → zoom=1.00)
   document.getElementById('zoomSlider').value = 100;
   document.getElementById('zoomValue').textContent = '100%';
+
   draw();
 }
 
-// ─── DRAW ───
+// ─── DRAW (editor) ───
 function draw() {
-  ctx.clearRect(0, 0, CANVAS_DISPLAY_SIZE, CANVAS_DISPLAY_SIZE);
+  ctx.clearRect(0, 0, C, C);
 
   if (userImg) {
-    const sc = imgState.baseScale * imgState.scale;
+    const sc = imgState.baseScale * imgState.zoom;
     ctx.drawImage(userImg, imgState.x, imgState.y, userImg.width * sc, userImg.height * sc);
   }
 
   if (frameImg) {
-    ctx.drawImage(frameImg, 0, 0, CANVAS_DISPLAY_SIZE, CANVAS_DISPLAY_SIZE);
+    ctx.drawImage(frameImg, 0, 0, C, C);
   }
 }
 
 // ─── ZOOM ───
+// Slider: integer 80–120. Maps linearly to zoom 0.80–1.20.
 function onZoomSlider(val) {
-  const pct = parseInt(val);
-  document.getElementById('zoomValue').textContent = pct + '%';
-  const oldSc = imgState.baseScale * imgState.scale;
-  imgState.scale = pct / 100;
-  const newSc = imgState.baseScale * imgState.scale;
+  const pct     = parseInt(val);
+  const newZoom = pct / 100;
 
-  // zoom toward center of canvas
-  const cx = CANVAS_DISPLAY_SIZE / 2;
-  const cy = CANVAS_DISPLAY_SIZE / 2;
+  document.getElementById('zoomValue').textContent = pct + '%';
+
+  const oldSc = imgState.baseScale * imgState.zoom;
+  imgState.zoom = newZoom;
+  const newSc = imgState.baseScale * imgState.zoom;
+
+  // Zoom anchored to canvas center so the view doesn't jump
+  const cx = C / 2, cy = C / 2;
   imgState.x = cx - (cx - imgState.x) * (newSc / oldSc);
   imgState.y = cy - (cy - imgState.y) * (newSc / oldSc);
 
@@ -495,32 +591,32 @@ function onZoomSlider(val) {
   draw();
 }
 
-// ─── CLAMP (prevent photo from fully leaving the canvas) ───
+// ─── CLAMP — image must fully cover the canvas at all times ───
+// Because baseScale is cover-fit and zoom >= ZOOM_MIN (0.80), the scaled image
+// is always >= canvas on its SMALLER axis. On its LARGER axis it always overflows.
+// Constraint: none of the four edges may cross inside the canvas boundary.
+//   x <= 0              left edge at or left of left side
+//   x + imgW >= C       right edge at or right of right side
+//   y <= 0              top edge at or above top
+//   y + imgH >= C       bottom edge at or below bottom
 function clampPosition() {
   if (!userImg) return;
-  const sc = imgState.baseScale * imgState.scale;
-  const w = userImg.width * sc;
-  const h = userImg.height * sc;
-  const margin = Math.min(w, h, CANVAS_DISPLAY_SIZE) * 0.15; // at least 15% visible
+  const sc = imgState.baseScale * imgState.zoom;
+  const w  = userImg.width  * sc;
+  const h  = userImg.height * sc;
 
-  imgState.x = Math.min(imgState.x, CANVAS_DISPLAY_SIZE - margin);
-  imgState.x = Math.max(imgState.x, margin - w);
-  imgState.y = Math.min(imgState.y, CANVAS_DISPLAY_SIZE - margin);
-  imgState.y = Math.max(imgState.y, margin - h);
+  imgState.x = Math.min(imgState.x, 0);
+  imgState.x = Math.max(imgState.x, C - w);
+  imgState.y = Math.min(imgState.y, 0);
+  imgState.y = Math.max(imgState.y, C - h);
 }
 
-// ─── DRAG: MOUSE ───
-canvas.addEventListener('mousedown', e => {
-  e.preventDefault();
-  startDrag(e.clientX, e.clientY);
-});
-window.addEventListener('mousemove', e => {
-  if (!drag.active) return;
-  moveDrag(e.clientX, e.clientY);
-});
-window.addEventListener('mouseup', () => { drag.active = false; });
+// ─── DRAG — MOUSE ───
+canvas.addEventListener('mousedown', e => { e.preventDefault(); startDrag(e.clientX, e.clientY); });
+window.addEventListener('mousemove', e => { if (drag.active) moveDrag(e.clientX, e.clientY); });
+window.addEventListener('mouseup',   () => { drag.active = false; });
 
-// ─── DRAG: TOUCH ───
+// ─── DRAG — TOUCH ───
 canvas.addEventListener('touchstart', e => {
   e.preventDefault();
   if (e.touches.length === 1) startDrag(e.touches[0].clientX, e.touches[0].clientY);
@@ -531,25 +627,27 @@ canvas.addEventListener('touchmove', e => {
 }, { passive: false });
 canvas.addEventListener('touchend', () => { drag.active = false; });
 
-function startDrag(cx, cy) {
+function clientToCanvas(cx, cy) {
   const rect = canvas.getBoundingClientRect();
-  const scaleX = CANVAS_DISPLAY_SIZE / rect.width;
-  const scaleY = CANVAS_DISPLAY_SIZE / rect.height;
+  return {
+    x: (cx - rect.left) * (C / rect.width),
+    y: (cy - rect.top)  * (C / rect.height)
+  };
+}
+
+function startDrag(cx, cy) {
+  const pt    = clientToCanvas(cx, cy);
   drag.active = true;
-  drag.startX = cx * scaleX;
-  drag.startY = cy * scaleY;
-  drag.imgX = imgState.x;
-  drag.imgY = imgState.y;
+  drag.startX = pt.x;
+  drag.startY = pt.y;
+  drag.imgX   = imgState.x;
+  drag.imgY   = imgState.y;
 }
 
 function moveDrag(cx, cy) {
-  const rect = canvas.getBoundingClientRect();
-  const scaleX = CANVAS_DISPLAY_SIZE / rect.width;
-  const scaleY = CANVAS_DISPLAY_SIZE / rect.height;
-  const dx = cx * scaleX - drag.startX;
-  const dy = cy * scaleY - drag.startY;
-  imgState.x = drag.imgX + dx;
-  imgState.y = drag.imgY + dy;
+  const pt   = clientToCanvas(cx, cy);
+  imgState.x = drag.imgX + (pt.x - drag.startX);
+  imgState.y = drag.imgY + (pt.y - drag.startY);
   clampPosition();
   draw();
 }
@@ -560,40 +658,36 @@ function downloadImage() {
 
   showToast('Đang tạo ảnh xuất…');
 
-  // Render at high resolution
-  const offCanvas = document.createElement('canvas');
-  offCanvas.width = EXPORT_SIZE;
+  const offCanvas  = document.createElement('canvas');
+  offCanvas.width  = EXPORT_SIZE;
   offCanvas.height = EXPORT_SIZE;
   const offCtx = offCanvas.getContext('2d');
 
-  // Scale factor from display canvas to export canvas
-  const ratio = EXPORT_SIZE / CANVAS_DISPLAY_SIZE;
+  // Upscale factor: export / display
+  const ratio = EXPORT_SIZE / C;
 
-  // Draw user image: translate & scale coordinates proportionally
-  const sc = imgState.baseScale * imgState.scale * ratio;
+  // Reproduce the exact same layout at export resolution
+  const sc = imgState.baseScale * imgState.zoom * ratio;
   offCtx.drawImage(
     userImg,
     imgState.x * ratio,
     imgState.y * ratio,
-    userImg.width * sc,
+    userImg.width  * sc,
     userImg.height * sc
   );
 
-  // Helper: overlay frame then trigger download
   const drawFrameAndSave = (fImage) => {
-    if (fImage) {
-      offCtx.drawImage(fImage, 0, 0, EXPORT_SIZE, EXPORT_SIZE);
-    }
+    if (fImage) offCtx.drawImage(fImage, 0, 0, EXPORT_SIZE, EXPORT_SIZE);
     try {
-      const link = document.createElement('a');
+      const link    = document.createElement('a');
       link.download = 'anh-ghep-khung.png';
-      link.href = offCanvas.toDataURL('image/png');
+      link.href     = offCanvas.toDataURL('image/png');
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       showToast('✓ Ảnh đã được tải về!');
     } catch (err) {
-      showToast('Lỗi xuất ảnh: canvas bị tainted. Hãy dùng server local.');
+      showToast('Lỗi: canvas bị tainted. Hãy dùng local server (Live Server / npx serve).');
       console.error('Export error:', err);
     }
   };
@@ -601,14 +695,10 @@ function downloadImage() {
   if (frameImg) {
     drawFrameAndSave(frameImg);
   } else {
-    // Try reloading frame with crossOrigin at export time
-    const fImg = new Image();
+    const fImg       = new Image();
     fImg.crossOrigin = 'anonymous';
-    fImg.onload = () => drawFrameAndSave(fImg);
-    fImg.onerror = () => {
-      showToast('Không tìm thấy frame.png — xuất ảnh không có khung.');
-      drawFrameAndSave(null);
-    };
+    fImg.onload  = () => drawFrameAndSave(fImg);
+    fImg.onerror = () => { showToast('Không tìm thấy frame.png — xuất ảnh không có khung.'); drawFrameAndSave(null); };
     fImg.src = FRAME_SRC + '?t=' + Date.now();
   }
 }
@@ -617,21 +707,30 @@ function downloadImage() {
 function showEditor() {
   document.getElementById('landing').style.display = 'none';
   const ed = document.getElementById('editor');
-  ed.style.display = 'flex';
-  ed.style.opacity = 0;
+  ed.style.display  = 'flex';
+  ed.style.opacity  = 0;
   requestAnimationFrame(() => {
     ed.style.transition = 'opacity .4s ease';
-    ed.style.opacity = 1;
+    ed.style.opacity    = 1;
   });
 }
 
 function resetApp() {
   userImg = null;
-  ctx.clearRect(0, 0, CANVAS_DISPLAY_SIZE, CANVAS_DISPLAY_SIZE);
+  ctx.clearRect(0, 0, C, C);
   document.getElementById('editor').style.display = 'none';
+
   const landing = document.getElementById('landing');
   landing.style.display = 'flex';
   landing.style.opacity = 1;
+
+  document.getElementById('uploadOverlay').style.display = 'flex';
+  drawLanding();
+}
+
+function showLandingLoading(on) {
+  document.getElementById('landingLoadingOverlay').classList.toggle('visible', on);
+  document.getElementById('uploadOverlay').style.display = on ? 'none' : 'flex';
 }
 
 function showLoading(on) {
@@ -646,6 +745,9 @@ function showToast(msg) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
 }
+
+// Render landing frame once layout is complete
+window.addEventListener('load', drawLanding);
 </script>
 </body>
 </html>
