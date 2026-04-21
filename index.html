@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghép Ảnh Khung</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f4f2;
+    --surface: #ffffff;
+    --border: #e8e6e2;
+    --text-primary: #1a1917;
+    --text-secondary: #7a7870;
+    --accent: #2a2825;
+    --accent-hover: #454340;
+    --btn-download: #1a1917;
+    --radius: 16px;
+    --shadow: 0 2px 24px rgba(0,0,0,0.07);
+    --shadow-lg: 0 8px 48px rgba(0,0,0,0.12);
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── LANDING ─── */
+  #landing {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    transition: opacity .4s ease;
+  }
+
+  .landing-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .landing-sub {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    letter-spacing: 0.6px;
+    margin-bottom: 52px;
+    text-transform: uppercase;
+  }
+
+  .btn-start {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 56px;
+    padding: 18px 40px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: background .2s, transform .15s, box-shadow .2s;
+    box-shadow: 0 4px 20px rgba(42,40,37,0.25);
+  }
+
+  .btn-start::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.08);
+    opacity: 0;
+    transition: opacity .2s;
+  }
+
+  .btn-start:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(42,40,37,0.3); }
+  .btn-start:hover::after { opacity: 1; }
+  .btn-start:active { transform: translateY(0); }
+
+  .btn-start svg { flex-shrink: 0; }
+
+  .landing-hint {
+    margin-top: 28px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border); }
+
+  /* ─── EDITOR ─── */
+  #editor {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 32px 16px 48px;
+    gap: 0;
+  }
+
+  .editor-header {
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+
+  .editor-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    letter-spacing: -0.3px;
+  }
+
+  .btn-reset {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: 1.5px solid var(--border);
+    border-radius: 24px;
+    padding: 8px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: border-color .2s, color .2s;
+  }
+  .btn-reset:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ─── CANVAS WRAPPER ─── */
+  .canvas-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 1/1;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    background: #e8e5e0;
+    cursor: grab;
+  }
+  .canvas-wrapper:active { cursor: grabbing; }
+
+  #canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* ─── CONTROLS ─── */
+  .controls {
+    width: 100%;
+    max-width: 520px;
+    margin-top: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px 22px;
+    box-shadow: var(--shadow);
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .control-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 400;
+    white-space: nowrap;
+    min-width: 60px;
+  }
+
+  .slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid #fff;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+    transition: transform .15s;
+  }
+  .slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  .slider::-moz-range-thumb {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid #fff;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+  }
+
+  .zoom-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    min-width: 38px;
+    text-align: right;
+  }
+
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+  .control-hint {
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hint-item { display: flex; align-items: center; gap: 5px; }
+
+  /* ─── DOWNLOAD BTN ─── */
+  .btn-download {
+    width: 100%;
+    max-width: 520px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: var(--btn-download);
+    color: #fff;
+    border: none;
+    border-radius: 56px;
+    padding: 18px 32px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: background .2s, transform .15s, box-shadow .2s;
+    box-shadow: 0 4px 20px rgba(26,25,23,0.2);
+  }
+  .btn-download:hover { background: #333; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,25,23,0.28); }
+  .btn-download:active { transform: translateY(0); }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #1a1917;
+    color: #fff;
+    font-size: 14px;
+    padding: 12px 24px;
+    border-radius: 32px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s, transform .3s;
+    white-space: nowrap;
+    z-index: 100;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ─── HIDDEN INPUT ─── */
+  #fileInput { display: none; }
+
+  /* ─── LOADING OVERLAY ─── */
+  .loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(245,244,242,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius);
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s;
+  }
+  .loading-overlay.visible { opacity: 1; pointer-events: all; }
+
+  .spinner {
+    width: 32px; height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 400px) {
+    .editor-header { margin-bottom: 18px; }
+    .controls { padding: 16px 18px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LANDING -->
+<div id="landing">
+  <p class="landing-logo">Frame Studio</p>
+  <p class="landing-sub">Ghép ảnh khung chuyên nghiệp</p>
+  <button class="btn-start" onclick="document.getElementById('fileInput').click()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="3"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+    BẮT ĐẦU: CHỌN ẢNH TỪ MÁY
+  </button>
+  <p class="landing-hint">
+    <span>PNG · JPG · WEBP</span>
+    <span class="dot"></span>
+    <span>Xử lý ngay trên trình duyệt</span>
+    <span class="dot"></span>
+    <span>Không lưu dữ liệu</span>
+  </p>
+</div>
+
+<!-- EDITOR -->
+<div id="editor">
+  <div class="editor-header">
+    <span class="editor-title">Chỉnh ảnh</span>
+    <button class="btn-reset" onclick="resetApp()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/>
+      </svg>
+      Chọn ảnh khác
+    </button>
+  </div>
+
+  <div class="canvas-wrapper" id="canvasWrapper">
+    <canvas id="canvas"></canvas>
+    <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+  </div>
+
+  <div class="controls">
+    <div class="control-row">
+      <span class="control-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+        </svg>
+        Thu phóng
+      </span>
+      <input type="range" id="zoomSlider" class="slider" min="10" max="300" value="100" oninput="onZoomSlider(this.value)">
+      <span class="zoom-value" id="zoomValue">100%</span>
+    </div>
+    <div class="divider"></div>
+    <div class="control-hint">
+      <span class="hint-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg>
+        Kéo thả để di chuyển ảnh
+      </span>
+      <span class="hint-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Frame luôn ở lớp trên cùng
+      </span>
+    </div>
+  </div>
+
+  <button class="btn-download" onclick="downloadImage()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    HOÀN THÀNH &amp; TẢI VỀ
+  </button>
+</div>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(this)">
+
+<script>
+// ─── STATE ───
+const CANVAS_DISPLAY_SIZE = 520; // px (display, hi-res export = 1080)
+const EXPORT_SIZE = 1080;
+const FRAME_SRC = 'frame.png';
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = CANVAS_DISPLAY_SIZE;
+canvas.height = CANVAS_DISPLAY_SIZE;
+
+let userImg = null;
+let frameImg = null;
+let imgState = { x: 0, y: 0, scale: 1, baseScale: 1 };
+let drag = { active: false, startX: 0, startY: 0, imgX: 0, imgY: 0 };
+
+// ─── INIT ───
+(function preloadFrame() {
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => { frameImg = img; draw(); };
+  img.onerror = () => { frameImg = null; };
+  img.src = FRAME_SRC;
+})();
+
+// ─── FILE SELECT ───
+function handleFileSelect(input) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if (!file.type.startsWith('image/')) { showToast('Vui lòng chọn file ảnh hợp lệ.'); return; }
+
+  showLoading(true);
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      userImg = img;
+      initImageState();
+      showEditor();
+      showLoading(false);
+    };
+    img.onerror = () => { showToast('Không thể đọc ảnh. Hãy thử lại.'); showLoading(false); };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  // reset input so same file can be reselected
+  input.value = '';
+}
+
+function initImageState() {
+  // Fit image to fill canvas (cover)
+  const ratio = Math.max(CANVAS_DISPLAY_SIZE / userImg.width, CANVAS_DISPLAY_SIZE / userImg.height);
+  imgState.baseScale = ratio;
+  imgState.scale = 1; // zoom multiplier (1 = fit-cover)
+  imgState.x = (CANVAS_DISPLAY_SIZE - userImg.width * ratio) / 2;
+  imgState.y = (CANVAS_DISPLAY_SIZE - userImg.height * ratio) / 2;
+  document.getElementById('zoomSlider').value = 100;
+  document.getElementById('zoomValue').textContent = '100%';
+  draw();
+}
+
+// ─── DRAW ───
+function draw() {
+  ctx.clearRect(0, 0, CANVAS_DISPLAY_SIZE, CANVAS_DISPLAY_SIZE);
+
+  if (userImg) {
+    const sc = imgState.baseScale * imgState.scale;
+    ctx.drawImage(userImg, imgState.x, imgState.y, userImg.width * sc, userImg.height * sc);
+  }
+
+  if (frameImg) {
+    ctx.drawImage(frameImg, 0, 0, CANVAS_DISPLAY_SIZE, CANVAS_DISPLAY_SIZE);
+  }
+}
+
+// ─── ZOOM ───
+function onZoomSlider(val) {
+  const pct = parseInt(val);
+  document.getElementById('zoomValue').textContent = pct + '%';
+  const oldSc = imgState.baseScale * imgState.scale;
+  imgState.scale = pct / 100;
+  const newSc = imgState.baseScale * imgState.scale;
+
+  // zoom toward center of canvas
+  const cx = CANVAS_DISPLAY_SIZE / 2;
+  const cy = CANVAS_DISPLAY_SIZE / 2;
+  imgState.x = cx - (cx - imgState.x) * (newSc / oldSc);
+  imgState.y = cy - (cy - imgState.y) * (newSc / oldSc);
+
+  clampPosition();
+  draw();
+}
+
+// ─── CLAMP (prevent photo from fully leaving the canvas) ───
+function clampPosition() {
+  if (!userImg) return;
+  const sc = imgState.baseScale * imgState.scale;
+  const w = userImg.width * sc;
+  const h = userImg.height * sc;
+  const margin = Math.min(w, h, CANVAS_DISPLAY_SIZE) * 0.15; // at least 15% visible
+
+  imgState.x = Math.min(imgState.x, CANVAS_DISPLAY_SIZE - margin);
+  imgState.x = Math.max(imgState.x, margin - w);
+  imgState.y = Math.min(imgState.y, CANVAS_DISPLAY_SIZE - margin);
+  imgState.y = Math.max(imgState.y, margin - h);
+}
+
+// ─── DRAG: MOUSE ───
+canvas.addEventListener('mousedown', e => {
+  e.preventDefault();
+  startDrag(e.clientX, e.clientY);
+});
+window.addEventListener('mousemove', e => {
+  if (!drag.active) return;
+  moveDrag(e.clientX, e.clientY);
+});
+window.addEventListener('mouseup', () => { drag.active = false; });
+
+// ─── DRAG: TOUCH ───
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  if (e.touches.length === 1) startDrag(e.touches[0].clientX, e.touches[0].clientY);
+}, { passive: false });
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (e.touches.length === 1 && drag.active) moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+}, { passive: false });
+canvas.addEventListener('touchend', () => { drag.active = false; });
+
+function startDrag(cx, cy) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = CANVAS_DISPLAY_SIZE / rect.width;
+  const scaleY = CANVAS_DISPLAY_SIZE / rect.height;
+  drag.active = true;
+  drag.startX = cx * scaleX;
+  drag.startY = cy * scaleY;
+  drag.imgX = imgState.x;
+  drag.imgY = imgState.y;
+}
+
+function moveDrag(cx, cy) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = CANVAS_DISPLAY_SIZE / rect.width;
+  const scaleY = CANVAS_DISPLAY_SIZE / rect.height;
+  const dx = cx * scaleX - drag.startX;
+  const dy = cy * scaleY - drag.startY;
+  imgState.x = drag.imgX + dx;
+  imgState.y = drag.imgY + dy;
+  clampPosition();
+  draw();
+}
+
+// ─── DOWNLOAD ───
+function downloadImage() {
+  if (!userImg) { showToast('Chưa có ảnh để xuất.'); return; }
+
+  showToast('Đang tạo ảnh xuất…');
+
+  // Render at high resolution
+  const offCanvas = document.createElement('canvas');
+  offCanvas.width = EXPORT_SIZE;
+  offCanvas.height = EXPORT_SIZE;
+  const offCtx = offCanvas.getContext('2d');
+
+  // Scale factor from display canvas to export canvas
+  const ratio = EXPORT_SIZE / CANVAS_DISPLAY_SIZE;
+
+  // Draw user image: translate & scale coordinates proportionally
+  const sc = imgState.baseScale * imgState.scale * ratio;
+  offCtx.drawImage(
+    userImg,
+    imgState.x * ratio,
+    imgState.y * ratio,
+    userImg.width * sc,
+    userImg.height * sc
+  );
+
+  // Helper: overlay frame then trigger download
+  const drawFrameAndSave = (fImage) => {
+    if (fImage) {
+      offCtx.drawImage(fImage, 0, 0, EXPORT_SIZE, EXPORT_SIZE);
+    }
+    try {
+      const link = document.createElement('a');
+      link.download = 'anh-ghep-khung.png';
+      link.href = offCanvas.toDataURL('image/png');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('✓ Ảnh đã được tải về!');
+    } catch (err) {
+      showToast('Lỗi xuất ảnh: canvas bị tainted. Hãy dùng server local.');
+      console.error('Export error:', err);
+    }
+  };
+
+  if (frameImg) {
+    drawFrameAndSave(frameImg);
+  } else {
+    // Try reloading frame with crossOrigin at export time
+    const fImg = new Image();
+    fImg.crossOrigin = 'anonymous';
+    fImg.onload = () => drawFrameAndSave(fImg);
+    fImg.onerror = () => {
+      showToast('Không tìm thấy frame.png — xuất ảnh không có khung.');
+      drawFrameAndSave(null);
+    };
+    fImg.src = FRAME_SRC + '?t=' + Date.now();
+  }
+}
+
+// ─── UI HELPERS ───
+function showEditor() {
+  document.getElementById('landing').style.display = 'none';
+  const ed = document.getElementById('editor');
+  ed.style.display = 'flex';
+  ed.style.opacity = 0;
+  requestAnimationFrame(() => {
+    ed.style.transition = 'opacity .4s ease';
+    ed.style.opacity = 1;
+  });
+}
+
+function resetApp() {
+  userImg = null;
+  ctx.clearRect(0, 0, CANVAS_DISPLAY_SIZE, CANVAS_DISPLAY_SIZE);
+  document.getElementById('editor').style.display = 'none';
+  const landing = document.getElementById('landing');
+  landing.style.display = 'flex';
+  landing.style.opacity = 1;
+}
+
+function showLoading(on) {
+  document.getElementById('loadingOverlay').classList.toggle('visible', on);
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
