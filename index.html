@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>PHỦ XANH TỰ HÀO - BÉ YÊU HÓA CHIẾN SĨ</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&family=Montserrat:wght@400;500;600;700;800&display=swap');
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -305,114 +305,130 @@
   @keyframes spin { to { transform: rotate(360deg); } }
 
   /* ══════════════════════════════════════
-     SAVE MODAL
+     SAVE OVERLAY — full-screen, Montserrat, Arla Green
   ══════════════════════════════════════ */
-  .modal-backdrop {
+  #saveOverlay {
     position: fixed; inset: 0;
-    background: rgba(15,14,13,0.65);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: linear-gradient(160deg, #00a060 0%, #008751 55%, #005c38 100%);
     z-index: 200;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .3s;
+    display: flex; flex-direction: column; align-items: center;
+    overflow-y: auto; overscroll-behavior: contain;
+    opacity: 0; pointer-events: none;
+    transition: opacity .5s ease;
   }
-  .modal-backdrop.open { opacity: 1; pointer-events: all; }
+  #saveOverlay.open { opacity: 1; pointer-events: all; }
 
-  .modal {
-    background: var(--surface);
-    border-radius: 20px;
-    width: 100%;
-    max-width: 420px;
-    max-height: 90svh;
-    overflow-y: auto;
-    box-shadow: 0 24px 64px rgba(0,0,0,0.25);
-    display: flex;
-    flex-direction: column;
-    transform: translateY(24px) scale(0.97);
-    transition: transform .3s ease;
+  .save-topbar {
+    width: 100%; max-width: 520px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 20px 0; flex-shrink: 0;
   }
-  .modal-backdrop.open .modal { transform: translateY(0) scale(1); }
-
-  .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 18px 20px 0;
+  .save-topbar-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(255,255,255,0.60);
   }
-  .modal-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 18px;
-    letter-spacing: -0.3px;
-  }
-  .modal-close {
-    width: 32px; height: 32px;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--bg);
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    color: var(--text-secondary);
-    transition: background .2s, color .2s;
-    flex-shrink: 0;
-  }
-  .modal-close:hover { background: var(--border); color: var(--text-primary); }
-
-  .modal-img-wrap {
-    margin: 16px 20px 0;
-    border-radius: 12px;
-    overflow: hidden;
-    background: #dedad5;
-    position: relative;
-  }
-  .modal-img-wrap img {
-    display: block;
-    width: 100%;
-    height: auto;
-    cursor: pointer;
-    -webkit-touch-callout: default; /* allow long-press save on iOS */
-  }
-
-  .modal-instruction {
-    margin: 14px 20px 0;
-    background: #fef9ec;
-    border: 1px solid #f5e8b0;
-    border-radius: 10px;
-    padding: 12px 14px;
-    font-size: 13px;
-    line-height: 1.6;
-    color: #7a6a20;
-  }
-  .modal-instruction strong { font-weight: 600; color: #5a4d10; }
-
-  .modal-footer {
-    padding: 14px 20px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .btn-direct-dl {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: var(--bg);
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    padding: 12px 16px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-primary);
-    cursor: pointer;
+  .btn-edit-back {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.30);
+    border-radius: 24px; padding: 7px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px; font-weight: 700; color: #fff;
+    cursor: pointer; white-space: nowrap;
     transition: background .2s, border-color .2s;
-    text-decoration: none;
+    letter-spacing: 0.3px;
   }
-  .btn-direct-dl:hover { background: #fff; border-color: var(--accent); }
+  .btn-edit-back:hover  { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.55); }
+  .btn-edit-back:active { transform: scale(0.97); }
+
+  .save-headline {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(20px, 6vw, 28px); font-weight: 800;
+    color: #fff; text-align: center; line-height: 1.2;
+    padding: 20px 24px 0; max-width: 480px; flex-shrink: 0;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  }
+  .save-headline span {
+    display: block; font-size: 0.52em; font-weight: 500;
+    color: rgba(255,255,255,0.75); margin-top: 4px; letter-spacing: 0.2px;
+  }
+
+  .save-img-wrap {
+    width: calc(100% - 32px); max-width: 400px;
+    margin-top: 20px; border-radius: 20px; overflow: hidden;
+    box-shadow: 0 16px 56px rgba(0,0,0,0.32), 0 0 0 5px rgba(255,255,255,0.22);
+    background: #c8e6c9; flex-shrink: 0;
+    transition: transform .2s;
+  }
+  .save-img-wrap:active { transform: scale(0.99); }
+  .save-img-wrap img {
+    display: block; width: 100%; height: auto;
+    -webkit-touch-callout: default;
+    cursor: pointer;
+  }
+
+  .save-press-badge {
+    margin-top: 10px; flex-shrink: 0;
+    background: rgba(255,255,255,0.20);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 30px; padding: 6px 18px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 700; color: #fff;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    display: flex; align-items: center; gap: 6px;
+    animation: pulse-badge 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse-badge {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.80; transform: scale(1.03); }
+  }
+
+  .save-instruction {
+    width: calc(100% - 32px); max-width: 400px;
+    margin-top: 16px; flex-shrink: 0;
+    background: rgba(255,255,255,0.13);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 16px; padding: 18px 20px;
+  }
+  .save-instruction p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px; font-weight: 500; color: #fff;
+    line-height: 1.75; text-align: center;
+  }
+  .save-instruction strong {
+    font-weight: 700; color: #fff;
+    background: rgba(255,255,255,0.20);
+    padding: 1px 7px; border-radius: 5px;
+  }
+
+  .btn-edit-big {
+    width: calc(100% - 32px); max-width: 400px;
+    margin-top: 16px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: rgba(255,255,255,0.16);
+    border: 2px solid rgba(255,255,255,0.38);
+    border-radius: 56px; padding: 16px 28px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px; font-weight: 700; letter-spacing: 0.8px;
+    color: #fff; cursor: pointer; text-transform: uppercase;
+    transition: background .2s, border-color .2s, transform .15s;
+  }
+  .btn-edit-big:hover  { background: rgba(255,255,255,0.26); border-color: rgba(255,255,255,0.60); }
+  .btn-edit-big:active { transform: scale(0.98); }
+
+  .btn-direct-dl {
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    background: transparent; border: none; padding: 10px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px; font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+    margin-top: 4px; margin-bottom: 40px; flex-shrink: 0;
+    transition: color .2s;
+  }
+  .btn-direct-dl:hover { color: #fff; }
 
   /* ══════════════════════════════════════
      TOAST
@@ -546,39 +562,61 @@
 </div>
 
 <!-- ══════════════════════════════════════
-     SAVE MODAL
+     SAVE OVERLAY — full-screen
 ══════════════════════════════════════ -->
-<div class="modal-backdrop" id="saveModal" onclick="onModalBackdropClick(event)">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title">Lưu ảnh của bạn</span>
-      <button class="modal-close" onclick="closeModal()" aria-label="Đóng">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
-    </div>
+<div id="saveOverlay">
 
-    <div class="modal-img-wrap">
-      <img id="modalResultImg" src="" alt="Kết quả ghép ảnh">
-    </div>
-
-    <div class="modal-instruction">
-      <strong>📱 Trên điện thoại:</strong> Nhấn giữ vào ảnh khoảng 2 giây để hiện menu lưu.<br>
-      Chọn <strong>"Lưu vào ảnh"</strong> (iOS) hoặc <strong>"Tải hình ảnh xuống"</strong> (Android).
-    </div>
-
-    <div class="modal-footer">
-      <a id="directDownloadLink" class="btn-direct-dl" download="anh-ghep-khung.png">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        Tải file trực tiếp (Android / PC)
-      </a>
-    </div>
+  <!-- Top bar -->
+  <div class="save-topbar">
+    <span class="save-topbar-title">Kết quả</span>
+    <button class="btn-edit-back" onclick="closeOverlay()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      Chỉnh sửa lại
+    </button>
   </div>
+
+  <!-- Headline -->
+  <h2 class="save-headline">
+    📸 ĐÃ SẴN SÀNG ĐỂ TỎA SÁNG!
+    <span>Ảnh chiến sĩ nhí của bé đã được tạo xong 🎉</span>
+  </h2>
+
+  <!-- Result image -->
+  <div class="save-img-wrap">
+    <img id="saveResultImg" src="" alt="Ảnh ghép khung">
+  </div>
+
+  <!-- Press-and-hold badge -->
+  <div class="save-press-badge">
+    👆 Nhấn giữ vào ảnh 2 giây để lưu
+  </div>
+
+  <!-- Instruction card -->
+  <div class="save-instruction">
+    <p>
+      Ba mẹ hãy nhấn giữ vào ảnh trên khoảng <strong>2 giây</strong>,
+      sau đó chọn <strong>"Lưu vào ảnh"</strong> (iOS) hoặc
+      <strong>"Tải hình ảnh xuống"</strong> (Android) để lưu giữ
+      khoảnh khắc này nhé. 💚
+    </p>
+  </div>
+
+  <!-- Edit back — big button -->
+  <button class="btn-edit-big" onclick="closeOverlay()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+    </svg>
+    ✏️ Chỉnh sửa lại vị trí ảnh
+  </button>
+
+  <!-- Direct download — small, for Android old devices -->
+  <a id="directDownloadLink" class="btn-direct-dl" download="be-yeu-hoa-chien-si.png">
+    ↓ Tải file trực tiếp (Android / PC)
+  </a>
+
 </div>
 
 <div class="toast" id="toast"></div>
@@ -868,11 +906,10 @@ function renderExport() {
 }
 
 // ══════════════════════════════════════
-//  OPEN SAVE MODAL
+//  OPEN SAVE OVERLAY (full-screen)
 // ══════════════════════════════════════
 function openSaveModal() {
   if (!userImg) { showToast('Chưa có ảnh để xuất.'); return; }
-
   showToast('Đang tạo ảnh…');
 
   const finalize = (fImage) => {
@@ -883,12 +920,13 @@ function openSaveModal() {
 
       const dataURL = off.toDataURL('image/png');
 
-      // Populate modal
-      document.getElementById('modalResultImg').src   = dataURL;
-      document.getElementById('directDownloadLink').href = dataURL;
+      document.getElementById('saveResultImg').src        = dataURL;
+      document.getElementById('directDownloadLink').href  = dataURL;
 
-      // Open modal
-      document.getElementById('saveModal').classList.add('open');
+      // Fade-in full-screen overlay
+      const overlay = document.getElementById('saveOverlay');
+      overlay.classList.add('open');
+      overlay.scrollTop = 0;
     } catch (err) {
       showToast('Lỗi: canvas bị tainted. Hãy dùng local server.');
       console.error(err);
@@ -906,15 +944,15 @@ function openSaveModal() {
   }
 }
 
-function closeModal() {
-  document.getElementById('saveModal').classList.remove('open');
-  // Free memory after transition
-  setTimeout(() => { document.getElementById('modalResultImg').src = ''; }, 400);
+function closeOverlay() {
+  document.getElementById('saveOverlay').classList.remove('open');
+  // Free base64 from memory after transition
+  setTimeout(() => { document.getElementById('saveResultImg').src = ''; }, 600);
 }
 
-function onModalBackdropClick(e) {
-  if (e.target === document.getElementById('saveModal')) closeModal();
-}
+// keep old name as alias for safety
+function closeModal() { closeOverlay(); }
+function onModalBackdropClick() {}
 
 // ══════════════════════════════════════
 //  UI HELPERS
